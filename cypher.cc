@@ -8,7 +8,7 @@ using namespace std;
 
 void displayMenu();
 int keyAmount(int keyCount);
-string encrypt(string text, int key);
+string encrypt(int key);
 string decrypt(string text, int key);
 
 int main()
@@ -29,13 +29,12 @@ int main()
         cin >> choice;
         if (choice == 1)
         {
-            key = choice;
             keyAmount(key);
         }
         if (choice == 2)
         {
-            encrypt(randomString, key);
-            randomString = randomString + encrypt(randomString, key);
+            encrypt(key);
+            randomString = randomString + encrypt(key);
         }
         if (choice == 3)
         {
@@ -74,7 +73,7 @@ int keyAmount(int key)
     return 0;
 }
 
-string encrypt(string text, int key)
+string encrypt(int key)
 {
     ifstream inStream;
     string inFileName = "input1.txt";
@@ -103,12 +102,14 @@ string encrypt(string text, int key)
     }
     while (!inStream.eof())
     {
+
         while (inStream.get(ch))
         {
-            int encryptKey = keyAmount(keyCount);
+
             int length = randomString.length();
             for (int i = 0; i < length; i++)
             {
+                int encryptKey = keyAmount(keyCount);
                 ch = randomString.at(i);
                 ch = ch + encryptKey;
             }
