@@ -7,9 +7,9 @@
 using namespace std;
 
 void displayMenu();
-int keyAmount(int keyCount);
+int keyValue();
 string encrypt(int key);
-string decrypt(string text, int key);
+string decrypt(int key);
 
 int main()
 {
@@ -29,16 +29,15 @@ int main()
         cin >> choice;
         if (choice == 1)
         {
-            keyAmount(key);
+            key = keyValue();
         }
         if (choice == 2)
         {
             encrypt(key);
-            randomString = randomString + encrypt(key);
         }
         if (choice == 3)
         {
-            randomString = randomString + decrypt(randomString, key);
+            decrypt(key);
         }
     } while (choice != 4);
     return 0;
@@ -57,20 +56,16 @@ void displayMenu()
     cout << four;
 }
 
-int keyAmount(int key)
+int keyValue()
 {
     int keyCount;
-    int keyAmount = 3;
     do
     {
         cout << "Set a key amount between 1 and 10: ";
         cin >> keyCount;
-        if (keyCount >= 1 && keyCount <= 10)
-        {
-            keyAmount = keyCount;
-        }
     } while (keyCount < 1 || keyCount > 10);
-    return 0;
+    return keyCount;
+    ;
 }
 
 string encrypt(int key)
@@ -80,8 +75,6 @@ string encrypt(int key)
     ofstream outStream;
     string outFileName;
     char ch;
-    int keyCount = 3;
-    string randomString;
 
     cout << "Enter the input file name: ";
     cin >> inFileName;
@@ -102,34 +95,25 @@ string encrypt(int key)
     }
     while (!inStream.eof())
     {
-
         while (inStream.get(ch))
         {
-
-            int length = randomString.length();
-            for (int i = 0; i < length; i++)
-            {
-                int encryptKey = keyAmount(keyCount);
-                ch = randomString.at(i);
-                ch = ch + encryptKey;
-            }
-            cout << randomString;
+            ch = ch + key;
+            outStream << ch;
         }
     }
+    inStream.close();
+    outStream.close();
+
     return 0;
-    ;
 }
 
-string decrypt(string text, int key)
+string decrypt(int key)
 {
     ifstream inStream;
     string inFileName = "input1.txt";
     ofstream outStream;
     string outFileName;
     char ch;
-    int keyCount = 3;
-    string randomString;
-    int length = randomString.length();
 
     cout << "Enter the input file name: ";
     cin >> inFileName;
@@ -148,18 +132,17 @@ string decrypt(string text, int key)
         cout << "Error: failed to open " << endl;
         exit(0);
     }
+
     while (!inStream.eof())
     {
-        while (inStream.get(ch))
-        {
-            int encryptKey = keyAmount(keyCount);
-            for (int i = 0; i < length; i++)
+            while (inStream.get(ch))
             {
-                ch = randomString.at(i);
-                ch = ch - encryptKey;
+                ch = ch - key;
+                outStream << ch;
             }
-        }
     }
+    inStream.close();
+    outStream.close();
+
     return 0;
-    ;
 }
